@@ -1,7 +1,8 @@
 const Snake = {
-    position: { x: 0, y: 0 },
+    position: { x: 0, y: Math.floor(ROWS / 2) },
     velocity: { x: 1, y: 0 },
-    length: 8,
+    length: 2,
+    score: 0,
     segments: [],
 
     draw(ctx) {
@@ -18,6 +19,17 @@ const Snake = {
                 CELL_SIZE
             );
         });
+        ctx.textAlign = "left";
+        ctx.fillStyle = "black";
+        ctx.fillText("Score: " + this.score, 20, 20);
+    },
+
+    reset() {
+        this.position = { x: 0, y: Math.floor(ROWS / 2) };
+        this.velocity = { x: 1, y: 0 };
+        this.length = 2;
+        this.score = 0;
+        this.segments = [];
     },
 
     update() {
@@ -40,25 +52,53 @@ const Snake = {
         ) {
             GAME.gameOver = true;
         }
+
+        // eat food
+        if (this.position.x === Food.x && this.position.y === Food.y) {
+            Food.reset();
+            this.length++;
+            this.score++;
+        }
+
+        // eat tail
+        this.segments.forEach((segment, i) => {
+            if (
+                i !== 0 &&
+                this.position.x === segment.x &&
+                this.position.y === segment.y
+            ) {
+                this.segments.length = i + 1;
+                this.length = this.segments.length;
+                this.score -= 5;
+            }
+        });
     },
 
     moveUp() {
-        this.velocity.x = 0;
-        this.velocity.y = -1;
+        if (this.velocity.y === 0) {
+            this.velocity.x = 0;
+            this.velocity.y = -1;
+        }
     },
 
     moveDown() {
-        this.velocity.x = 0;
-        this.velocity.y = 1;
+        if (this.velocity.y === 0) {
+            this.velocity.x = 0;
+            this.velocity.y = 1;
+        }
     },
 
     moveLeft() {
-        this.velocity.x = -1;
-        this.velocity.y = 0;
+        if (this.velocity.x === 0) {
+            this.velocity.x = -1;
+            this.velocity.y = 0;
+        }
     },
 
     moveRight() {
-        this.velocity.x = 1;
-        this.velocity.y = 0;
+        if (this.velocity.x === 0) {
+            this.velocity.x = 1;
+            this.velocity.y = 0;
+        }
     },
 };
