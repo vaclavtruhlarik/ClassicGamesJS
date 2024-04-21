@@ -30,6 +30,16 @@ const Snake = {
         if (this.segments.length > this.length) {
             this.segments.pop();
         }
+
+        // check for collision with walls
+        if (
+            this.position.x < 0 ||
+            this.position.x >= COLUMNS ||
+            this.position.y < 0 ||
+            this.position.y >= ROWS
+        ) {
+            GAME.gameOver = true;
+        }
     },
 
     moveUp() {

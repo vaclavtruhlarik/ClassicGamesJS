@@ -25,6 +25,13 @@ window.addEventListener("load", function () {
         ctx.clearRect(0, 0, GAME.width, GAME.height);
         Snake.draw(ctx);
         Snake.update();
+
+        if (GAME.gameOver) {
+            ctx.fillStyle = "black";
+            ctx.font = "40px Impact";
+            ctx.textAlign = "center";
+            ctx.fillText("GAME OVER!", GAME.width / 2, GAME.height / 2);
+        }
     }
 
     setInterval(animate, 250);
